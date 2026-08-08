@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  DOCTOR
+  PATIENT
+  LAB
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  role      Role
+  createdAt DateTime @default(now())
+
+  doctor    Doctor?
+  patient   Patient?
+  labStaff  LabPersonnel?
+}
+
+model Doctor {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @unique
+  user         User     @relation(fields: [userId], references: [id])
+  fullName     String
+  specialty    String?
+  phone        String?
+
+  appointments Appointment[]
+  medicalRecords MedicalRecord[]
+  prescriptions  Prescription[]
+  labRequests    LabTest[]
+}
+
+model Patient {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @unique
+  user         User     @relation(fields: [userId], references: [id])
+  fullName     String
+  dateOfBirth  DateTime?
+  phone        String?
+  address      String?
+
+  appointments   Appointment[]
+  medicalRecords MedicalRecord[]
+  prescriptions  Prescription[]
+  labTests       LabTest[]
+}
+
+model LabPersonnel {
+  id       Int    @id @default(autoincrement())
+  userId   Int    @unique
+  user     User   @relation(fields: [userId], references: [id])
+  fullName String
+
+  processedTests LabTest[] @relation("ProcessedBy")
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+model Appointment {
+  id        Int               @id @default(autoincrement())
+  patientId Int
+  patient   Patient           @relation(fields: [patientId], references: [id])
+  doctorId  Int
+  doctor    Doctor            @relation(fields: [doctorId], references: [id])
+  dateTime  DateTime
+  status    AppointmentStatus @default(PENDING)
+  notes     String?
+  createdAt DateTime          @default(now())
+}
+
+model MedicalRecord {
+  id         Int      @id @default(autoincrement())
+  patientId  Int
+  patient    Patient  @relation(fields: [patientId], references: [id])
+  doctorId   Int
+  doctor     Doctor   @relation(fields: [doctorId], references: [id])
+  diagnosis  String
+  notes      String?
+  createdAt  DateTime @default(now())
+
+  prescriptions Prescription[]
+  labTests      LabTest[]
+}
+
+model Prescription {
+  id              Int      @id @default(autoincrement())
+  patientId       Int
+  patient         Patient  @relation(fields: [patientId], references: [id])
+  doctorId        Int
+  doctor          Doctor   @relation(fields: [doctorId], references: [id])
+  medicalRecordId Int?
+  medicalRecord   MedicalRecord? @relation(fields: [medicalRecordId], references: [id])
+  createdAt       DateTime @default(now())
+
+  items PrescriptionItem[]
+}
+
+model PrescriptionItem {
+  id             Int          @id @default(autoincrement())
+  prescriptionId Int
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id])
+  drugName       String
+  dosage         String
+  frequency      String
+  duration       String
+}
+
+enum LabTestStatus {
+  REQUESTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+model LabTest {
+  id              Int           @id @default(autoincrement())
+  patientId       Int
+  patient         Patient       @relation(fields: [patientId], references: [id])
+  doctorId        Int
+  doctor          Doctor        @relation(fields: [doctorId], references: [id])
+  medicalRecordId Int?
+  medicalRecord   MedicalRecord? @relation(fields: [medicalRecordId], references: [id])
+  processedById   Int?
+  processedBy     LabPersonnel? @relation("ProcessedBy", fields: [processedById], references: [id])
+  testType        String
+  status          LabTestStatus @default(REQUESTED)
+  resultText      String?
+  resultFileUrl   String?
+  requestedAt     DateTime      @default(now())
+  completedAt     DateTime?
+}
