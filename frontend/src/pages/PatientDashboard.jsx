@@ -1,4 +1,5 @@
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import './PatientDashboard.css';
 
 const recentActivity = [
@@ -9,6 +10,7 @@ const recentActivity = [
 
 export default function PatientDashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const firstName = user.email.split('@')[0];
 
   return (
@@ -65,7 +67,7 @@ export default function PatientDashboard() {
         </div>
 
         <div className="patient-side-col">
-          <button className="side-action-btn primary">
+          <button className="side-action-btn primary" onClick={() => navigate('/patient/book-appointment')}>
             <span className="side-action-title">Book New Appointment</span>
             <span className="side-action-sub">Find a time that works</span>
           </button>
