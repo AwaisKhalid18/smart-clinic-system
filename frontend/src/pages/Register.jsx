@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../api/axios';
+import hospitalBg from '../assets/hospital-hallway.webp';
 import { useAuth } from '../context/AuthContext';
 
 export default function Register() {
@@ -36,7 +37,7 @@ export default function Register() {
   }
 
   return (
-    <div className="auth-page">
+   <div className="auth-page register-page" style={{ backgroundImage: `url(${hospitalBg})` }}>
       <div className="auth-header">
         <div className="auth-icon">
           <svg viewBox="0 0 24 24" fill="none" width="28" height="28">

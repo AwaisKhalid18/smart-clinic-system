@@ -32,7 +32,7 @@ export default function Login() {
   }
 
   return (
-    <div className="auth-page">
+  <div className="auth-page login-page">
       <div className="auth-header">
         <div className="auth-icon">
           <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
@@ -135,3 +135,4 @@ export default function Login() {
     </div>
   );
 }
+
