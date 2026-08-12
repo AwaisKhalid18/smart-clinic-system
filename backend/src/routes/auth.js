@@ -2,10 +2,11 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const prisma = require('../prismaClient');
 const { generateToken } = require('../utils/jwt');
+const { authLimiter } = require('../middleware/rateLimit');
 
 const router = express.Router();
 
-router.post('/register', async (req, res) => {
+router.post('/register', authLimiter, async (req, res) => {
   try {
     const { email, password, role, fullName } = req.body;
 
@@ -48,7 +49,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login', authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
 
