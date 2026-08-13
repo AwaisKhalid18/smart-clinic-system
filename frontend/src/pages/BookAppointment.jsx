@@ -1,12 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import api from '../api/axios';
 import './BookAppointment.css';
-
-const doctors = [
-  { id: 1, name: 'Dr. Sarah Jenkins', specialty: 'Cardiology', rating: 4.9, reviews: 124, nextAvailable: 'Tomorrow, 9:00 AM' },
-  { id: 2, name: 'Dr. Michael Chang', specialty: 'Neurology', rating: 4.8, reviews: 89, nextAvailable: 'Oct 12, 2:30 PM' },
-  { id: 3, name: 'Dr. Ananya Patel', specialty: 'Pediatrics', rating: 5.0, reviews: 210, nextAvailable: 'Today, 4:15 PM' },
-];
 
 const timeSlots = ['9:00 AM', '9:30 AM', '10:00 AM', '11:00 AM', '2:00 PM', '2:30 PM', '3:00 PM', '4:15 PM'];
 
@@ -14,14 +10,31 @@ export default function BookAppointment() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [search, setSearch] = useState('');
+  const [doctors, setDoctors] = useState([]);
+  const [loadingDoctors, setLoadingDoctors] = useState(true);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    async function loadDoctors() {
+      try {
+        const res = await api.get('/doctors');
+        setDoctors(res.data);
+      } catch (err) {
+        toast.error('Failed to load doctors');
+      } finally {
+        setLoadingDoctors(false);
+      }
+    }
+    loadDoctors();
+  }, []);
 
   const filteredDoctors = doctors.filter(
     (d) =>
-      d.name.toLowerCase().includes(search.toLowerCase()) ||
-      d.specialty.toLowerCase().includes(search.toLowerCase())
+      d.fullName.toLowerCase().includes(search.toLowerCase()) ||
+      (d.specialty || '').toLowerCase().includes(search.toLowerCase())
   );
 
   function pickDoctor(doctor) {
@@ -34,9 +47,31 @@ export default function BookAppointment() {
     setStep(3);
   }
 
-  function finishBooking() {
-    // Backend appointment creation endpoint not built yet — placeholder for now
-    navigate('/patient/dashboard');
+  function timeTo24Hour(time) {
+    const [t, meridiem] = time.split(' ');
+    let [hours, minutes] = t.split(':').map(Number);
+    if (meridiem === 'PM' && hours !== 12) hours += 12;
+    if (meridiem === 'AM' && hours === 12) hours = 0;
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
+  }
+
+  async function finishBooking() {
+    setSubmitting(true);
+    try {
+      const isoDateTime = new Date(`${selectedDate}T${timeTo24Hour(selectedTime)}`).toISOString();
+
+      await api.post('/appointments', {
+        doctorId: selectedDoctor.id,
+        dateTime: isoDateTime,
+      });
+
+      toast.success('Appointment booked');
+      navigate('/patient/dashboard');
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Failed to book appointment');
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -74,44 +109,50 @@ export default function BookAppointment() {
 
             <input
               className="doctor-search"
-              placeholder="Search by name, specialty, or condition..."
+              placeholder="Search by name or specialty..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
 
-            <div className="doctor-grid">
-              {filteredDoctors.map((doc) => (
-                <div className="doctor-card" key={doc.id}>
-                  <div className="doctor-card-top">
-                    <div className="doctor-avatar">{doc.name.split(' ')[1]?.charAt(0)}</div>
-                    <div>
-                      <div className="doctor-name">{doc.name}</div>
-                      <div className="doctor-specialty">{doc.specialty}</div>
-                      <div className="doctor-rating">★ {doc.rating} ({doc.reviews} reviews)</div>
+            {loadingDoctors ? (
+              <p>Loading doctors...</p>
+            ) : filteredDoctors.length === 0 ? (
+              <p>No doctors found.</p>
+            ) : (
+              <div className="doctor-grid">
+                {filteredDoctors.map((doc) => (
+                  <div className="doctor-card" key={doc.id}>
+                    <div className="doctor-card-top">
+                      <div className="doctor-avatar">{doc.fullName.charAt(0)}</div>
+                      <div>
+                        <div className="doctor-name">{doc.fullName}</div>
+                        <div className="doctor-specialty">{doc.specialty || 'General'}</div>
+                      </div>
+                    </div>
+                    <div className="doctor-card-bottom">
+                      <div>
+                        <div className="next-available-label">Available</div>
+                        <div className="next-available-value">Select a time next</div>
+                      </div>
+                      <button className="doctor-select-btn" onClick={() => pickDoctor(doc)}>→</button>
                     </div>
                   </div>
-                  <div className="doctor-card-bottom">
-                    <div>
-                      <div className="next-available-label">Next Available</div>
-                      <div className="next-available-value">{doc.nextAvailable}</div>
-                    </div>
-                    <button className="doctor-select-btn" onClick={() => pickDoctor(doc)}>→</button>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
         {step === 2 && selectedDoctor && (
           <div className="book-step-body">
             <h2 className="step-title">Pick a Date & Time</h2>
-            <p className="step-subtitle">Booking with {selectedDoctor.name} · {selectedDoctor.specialty}</p>
+            <p className="step-subtitle">Booking with {selectedDoctor.fullName} · {selectedDoctor.specialty || 'General'}</p>
 
             <label className="date-label">Date</label>
             <input
               type="date"
               className="date-input"
+              min={new Date().toISOString().split('T')[0]}
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
             />
@@ -143,11 +184,11 @@ export default function BookAppointment() {
             <div className="confirm-summary">
               <div className="confirm-row">
                 <span className="confirm-label">Doctor</span>
-                <span className="confirm-value">{selectedDoctor.name}</span>
+                <span className="confirm-value">{selectedDoctor.fullName}</span>
               </div>
               <div className="confirm-row">
                 <span className="confirm-label">Specialty</span>
-                <span className="confirm-value">{selectedDoctor.specialty}</span>
+                <span className="confirm-value">{selectedDoctor.specialty || 'General'}</span>
               </div>
               <div className="confirm-row">
                 <span className="confirm-label">Date</span>
@@ -159,8 +200,8 @@ export default function BookAppointment() {
               </div>
             </div>
 
-            <button className="continue-btn" onClick={finishBooking}>
-              Confirm Booking
+            <button className="continue-btn" onClick={finishBooking} disabled={submitting}>
+              {submitting ? 'Booking...' : 'Confirm Booking'}
             </button>
           </div>
         )}
