@@ -5,7 +5,7 @@ const appointmentRoutes = require('./routes/appointments');
 const doctorRoutes = require('./routes/doctors');
 const medicalRecordRoutes = require('./routes/medicalRecords');
 const prescriptionRoutes = require('./routes/prescriptions');
-
+const labTestRoutes = require('./routes/labTests');
 
 const app = express();
 
@@ -22,7 +22,7 @@ app.use('/api/appointments', appointmentRoutes);
 app.use('/api/doctors', doctorRoutes);
 app.use('/api/medical-records', medicalRecordRoutes);
 app.use('/api/prescriptions', prescriptionRoutes);
-
+app.use('/api/lab-tests', labTestRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'SCMS API running' });
