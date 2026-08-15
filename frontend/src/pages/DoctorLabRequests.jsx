@@ -77,8 +77,8 @@ export default function DoctorLabRequests() {
           <form onSubmit={handleSubmit} className="lab-request-form">
             <div className="form-group">
               <label>Patient</label>
-              <select
-                className="form-input"
+            <select
+                className="doctor-form-input"
                 value={form.patientId}
                 onChange={(e) => setForm({ ...form, patientId: e.target.value })}
                 required
@@ -91,8 +91,8 @@ export default function DoctorLabRequests() {
             </div>
             <div className="form-group">
               <label>Test Type</label>
-              <input
-                className="form-input"
+<input
+                className="doctor-form-input"
                 placeholder="e.g. Complete Blood Count"
                 value={form.testType}
                 onChange={(e) => setForm({ ...form, testType: e.target.value })}

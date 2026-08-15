@@ -112,23 +112,27 @@
 
 .input-icon-wrap svg {
   position: absolute;
-  left: 0.85rem;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
   width: 18px;
   height: 18px;
   color: #94a3b8;
   pointer-events: none;
+  z-index: 1;
 }
 
 .form-input {
   width: 100%;
-  padding: 0.7rem 0.85rem 0.7rem 2.6rem;
+  padding: 0.7rem 0.85rem 0.7rem 2.8rem;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
   font-size: 0.95rem;
   color: #0f172a;
   outline: none;
+  position: relative;
+  z-index: 0;
 }
-
 .form-input:focus {
   border-color: #0f766e;
 }
