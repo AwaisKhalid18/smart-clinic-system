@@ -14,7 +14,8 @@ import BookAppointment from './pages/BookAppointment';
 import PatientRecords from './pages/PatientRecords';
 import PatientPrescriptions from './pages/PatientPrescriptions';
 import PatientLabResults from './pages/PatientLabResults';
-
+import DoctorPatients from './pages/DoctorPatients';
+import DoctorLabRequests from './pages/DoctorLabRequests';
 
 
 
@@ -44,7 +45,8 @@ function App() {
         <Route path="/patient/records" element={<PatientRecords />} />
         <Route path="/patient/prescriptions" element={<PatientPrescriptions />} />
         <Route path="/patient/lab-results" element={<PatientLabResults />} />
-
+         <Route path="/doctor/patients" element={<DoctorPatients />} />
+        <Route path="/doctor/lab-requests" element={<DoctorLabRequests />} />
 
 
       </Route>

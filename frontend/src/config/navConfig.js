@@ -1,11 +1,8 @@
 export const navConfig = {
-  DOCTOR: [
+DOCTOR: [
     { label: 'Dashboard', path: '/doctor/dashboard' },
-    { label: 'Schedule', path: '/doctor/schedule' },
     { label: 'Patients', path: '/doctor/patients' },
-    { label: 'Lab Results', path: '/doctor/lab-results' },
-    { label: 'Inventory', path: '/doctor/inventory' },
-    { label: 'Settings', path: '/doctor/settings' },
+    { label: 'Lab Requests', path: '/doctor/lab-requests' },
   ],
 PATIENT: [
     { label: 'Dashboard', path: '/patient/dashboard' },
