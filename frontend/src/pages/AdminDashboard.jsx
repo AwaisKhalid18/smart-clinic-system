@@ -1,16 +1,33 @@
-import { useAuth } from '../context/AuthContext';
+import { useState, useEffect } from 'react';
+import api from '../api/axios';
 import './AdminDashboard.css';
 
-const recentRegistrations = [
-  { initials: 'JD', name: 'John Doe', meta: 'PT-8472 · Cardiology', time: 'NEW' },
-  { initials: 'ES', name: 'Emma Smith', meta: 'PT-8471 · Pediatrics', time: '10m ago' },
-  { initials: 'MW', name: 'Michael Wong', meta: 'PT-8470 · Orthopedics', time: '1h ago' },
-  { initials: 'LJ', name: 'Lisa Johnson', meta: 'PT-8469 · General', time: '2h ago' },
-  { initials: 'RA', name: 'Robert Ali', meta: 'PT-8468 · Neurology', time: '3h ago' },
-];
-
 export default function AdminDashboard() {
-  const { user } = useAuth();
+  const [stats, setStats] = useState(null);
+  const [patients, setPatients] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [statsRes, patientsRes] = await Promise.all([
+          api.get('/admin/stats'),
+          api.get('/admin/patients'),
+        ]);
+        setStats(statsRes.data);
+        setPatients(patientsRes.data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
+
+  const recentPatients = [...patients]
+    .sort((a, b) => new Date(b.user.createdAt) - new Date(a.user.createdAt))
+    .slice(0, 5);
 
   return (
     <div className="admin-dashboard">
@@ -22,74 +39,63 @@ export default function AdminDashboard() {
         <input className="admin-search" placeholder="Search patients, doctors..." />
       </div>
 
-      <div className="admin-stat-row">
-        <div className="admin-stat-card">
-          <div className="stat-label">Appointments Today</div>
-          <div className="stat-value">142</div>
-          <div className="stat-delta up">↑ 12% vs yesterday</div>
-        </div>
-        <div className="admin-stat-card">
-          <div className="stat-label">Active Doctors</div>
-          <div className="stat-value">24</div>
-          <div className="stat-delta neutral">— 0% vs last week</div>
-        </div>
-        <div className="admin-stat-card">
-          <div className="stat-label">Total Patients</div>
-          <div className="stat-value">8,459</div>
-          <div className="stat-delta up">↑ 4.3% vs last month</div>
-        </div>
-        <div className="admin-stat-card">
-          <div className="stat-label">Clinic Capacity</div>
-          <div className="stat-value">82%</div>
-          <div className="capacity-bar">
-            <div className="capacity-fill" style={{ width: '82%' }}></div>
-          </div>
-          <div className="stat-delta neutral">Near peak capacity</div>
-        </div>
-      </div>
-
-      <div className="admin-columns">
-        <div className="panel volume-panel">
-          <div className="panel-header-row">
-            <div>
-              <div className="panel-header">Weekly Patient Volume</div>
-              <div className="panel-subheader">Admissions and outpatients over the last 7 days.</div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <div className="admin-stat-row">
+            <div className="admin-stat-card">
+              <div className="stat-label">Appointments Today</div>
+              <div className="stat-value">{stats.appointmentsToday}</div>
             </div>
-            <div className="volume-toggle">
-              <button className="toggle-btn active">Week</button>
-              <button className="toggle-btn">Month</button>
+            <div className="admin-stat-card">
+              <div className="stat-label">Active Doctors</div>
+              <div className="stat-value">{stats.totalDoctors}</div>
+            </div>
+            <div className="admin-stat-card">
+              <div className="stat-label">Total Patients</div>
+              <div className="stat-value">{stats.totalPatients}</div>
+            </div>
+            <div className="admin-stat-card">
+              <div className="stat-label">Total Appointments</div>
+              <div className="stat-value">{stats.totalAppointments}</div>
             </div>
           </div>
-          <svg viewBox="0 0 500 180" className="volume-chart" preserveAspectRatio="none">
-            <polyline
-              fill="none"
-              stroke="#0f766e"
-              strokeWidth="3"
-              points="10,140 80,90 150,120 220,60 290,100 360,40 430,20"
-            />
-          </svg>
-          <div className="volume-days">
-            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
-          </div>
-        </div>
 
-        <div className="panel registrations-panel">
-          <div className="panel-header-row">
-            <span className="panel-header">Recent Registrations</span>
-          </div>
-          {recentRegistrations.map((reg, i) => (
-            <div className="registration-row" key={i}>
-              <div className="reg-avatar">{reg.initials}</div>
-              <div className="reg-body">
-                <div className="reg-name">{reg.name}</div>
-                <div className="reg-meta">{reg.meta}</div>
+          <div className="admin-columns">
+            <div className="panel volume-panel">
+              <div className="panel-header-row">
+                <div>
+                  <div className="panel-header">Clinic Overview</div>
+                  <div className="panel-subheader">Summary of current clinic activity.</div>
+                </div>
               </div>
-              <div className={`reg-time ${reg.time === 'NEW' ? 'new-badge' : ''}`}>{reg.time}</div>
+              <p style={{ color: '#64748b', fontSize: '0.85rem' }}>
+                Detailed volume charts will appear here once appointment history builds up over time.
+              </p>
             </div>
-          ))}
-          <button className="view-all-btn">View All →</button>
-        </div>
-      </div>
+
+            <div className="panel registrations-panel">
+              <div className="panel-header-row">
+                <span className="panel-header">Recent Registrations</span>
+              </div>
+              {recentPatients.length === 0 ? (
+                <p style={{ color: '#64748b', fontSize: '0.85rem' }}>No patients registered yet.</p>
+              ) : (
+                recentPatients.map((p) => (
+                  <div className="registration-row" key={p.id}>
+                    <div className="reg-avatar">{p.fullName.charAt(0)}</div>
+                    <div className="reg-body">
+                      <div className="reg-name">{p.fullName}</div>
+                      <div className="reg-meta">{p.user.email}</div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

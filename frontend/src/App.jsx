@@ -11,6 +11,11 @@ import AdminDashboard from './pages/AdminDashboard';
 import { useAuth } from './context/AuthContext';
 import './components/DashboardLayout.css';
 import BookAppointment from './pages/BookAppointment';
+import PatientRecords from './pages/PatientRecords';
+import PatientPrescriptions from './pages/PatientPrescriptions';
+import PatientLabResults from './pages/PatientLabResults';
+
+
 
 
 function App() {
@@ -34,7 +39,14 @@ function App() {
         <Route path="/patient/dashboard" element={<PatientDashboard />} />
         <Route path="/lab/dashboard" element={<LabDashboard />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
         <Route path="/patient/book-appointment" element={<BookAppointment />} />
+        <Route path="/patient/records" element={<PatientRecords />} />
+        <Route path="/patient/prescriptions" element={<PatientPrescriptions />} />
+        <Route path="/patient/lab-results" element={<PatientLabResults />} />
+
+
+
       </Route>
 
       <Route

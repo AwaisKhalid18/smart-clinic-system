@@ -7,13 +7,11 @@ export const navConfig = {
     { label: 'Inventory', path: '/doctor/inventory' },
     { label: 'Settings', path: '/doctor/settings' },
   ],
-  PATIENT: [
+PATIENT: [
     { label: 'Dashboard', path: '/patient/dashboard' },
-    { label: 'Schedule', path: '/patient/schedule' },
-    { label: 'Patients', path: '/patient/patients' },
+    { label: 'Medical Records', path: '/patient/records' },
+    { label: 'Prescriptions', path: '/patient/prescriptions' },
     { label: 'Lab Results', path: '/patient/lab-results' },
-    { label: 'Inventory', path: '/patient/inventory' },
-    { label: 'Settings', path: '/patient/settings' },
   ],
   LAB: [
     { label: 'Dashboard', path: '/lab/dashboard' },
