@@ -32,10 +32,16 @@ router.post('/', authenticate, authorize('DOCTOR'), async (req, res) => {
     if (!doctor) {
       return res.status(404).json({ error: 'Doctor profile not found' });
     }
-
-    const patient = await prisma.patient.findUnique({ where: { id: parsed.data.patientId } });
+   const patient = await prisma.patient.findUnique({ where: { id: parsed.data.patientId } });
     if (!patient) {
       return res.status(404).json({ error: 'Patient not found' });
+    }
+
+    const hasTreatedPatient = await prisma.appointment.findFirst({
+      where: { doctorId: doctor.id, patientId: patient.id },
+    });
+    if (!hasTreatedPatient) {
+      return res.status(403).json({ error: 'You can only request tests for your own patients' });
     }
 
     if (parsed.data.medicalRecordId) {

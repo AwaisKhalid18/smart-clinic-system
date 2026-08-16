@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
 import './DoctorDashboard.css';
@@ -14,20 +15,35 @@ export default function DoctorDashboard() {
   const { user } = useAuth();
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [updatingId, setUpdatingId] = useState(null);
 
   useEffect(() => {
-    async function loadAppointments() {
-      try {
-        const res = await api.get('/appointments');
-        setAppointments(res.data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    }
     loadAppointments();
   }, []);
+
+  async function loadAppointments() {
+    try {
+      const res = await api.get('/appointments');
+      setAppointments(res.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function updateStatus(id, status) {
+    setUpdatingId(id);
+    try {
+      await api.patch(`/appointments/${id}`, { status });
+      toast.success(`Appointment marked ${status.toLowerCase()}`);
+      loadAppointments();
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Failed to update appointment');
+    } finally {
+      setUpdatingId(null);
+    }
+  }
 
   const today = new Date().toDateString();
   const todaysAppointments = appointments.filter(
@@ -71,6 +87,7 @@ export default function DoctorDashboard() {
                     <th>Patient</th>
                     <th>Notes</th>
                     <th>Status</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -90,6 +107,47 @@ export default function DoctorDashboard() {
                       <td>{appt.notes || '—'}</td>
                       <td>
                         <span className={statusClass[appt.status]}>{appt.status}</span>
+                      </td>
+                      <td>
+                        {appt.status === 'PENDING' && (
+                          <div className="appt-actions">
+                            <button
+                              className="appt-action-btn confirm"
+                              disabled={updatingId === appt.id}
+                              onClick={() => updateStatus(appt.id, 'CONFIRMED')}
+                            >
+                              Confirm
+                            </button>
+                            <button
+                              className="appt-action-btn cancel"
+                              disabled={updatingId === appt.id}
+                              onClick={() => updateStatus(appt.id, 'CANCELLED')}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        )}
+                        {appt.status === 'CONFIRMED' && (
+                          <div className="appt-actions">
+                            <button
+                              className="appt-action-btn confirm"
+                              disabled={updatingId === appt.id}
+                              onClick={() => updateStatus(appt.id, 'COMPLETED')}
+                            >
+                              Mark Completed
+                            </button>
+                            <button
+                              className="appt-action-btn cancel"
+                              disabled={updatingId === appt.id}
+                              onClick={() => updateStatus(appt.id, 'CANCELLED')}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        )}
+                        {(appt.status === 'COMPLETED' || appt.status === 'CANCELLED') && (
+                          <span className="appt-no-action">—</span>
+                        )}
                       </td>
                     </tr>
                   ))}

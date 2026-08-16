@@ -270,3 +270,48 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+  .appt-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.appt-action-btn {
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.appt-action-btn.confirm {
+  background: #ecfdf5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+
+.appt-action-btn.confirm:hover:not(:disabled) {
+  background: #d1fae5;
+}
+
+.appt-action-btn.cancel {
+  background: #fef2f2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+.appt-action-btn.cancel:hover:not(:disabled) {
+  background: #fee2e2;
+}
+
+.appt-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.appt-no-action {
+  color: #cbd5e1;
+  font-size: 0.85rem;
+}
