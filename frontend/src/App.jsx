@@ -16,7 +16,7 @@ import PatientPrescriptions from './pages/PatientPrescriptions';
 import PatientLabResults from './pages/PatientLabResults';
 import DoctorPatients from './pages/DoctorPatients';
 import DoctorLabRequests from './pages/DoctorLabRequests';
-
+import AdminCreateStaff from './pages/AdminCreateStaff';
 
 
 function App() {
@@ -29,26 +29,24 @@ function App() {
       <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
       <Route path="/register" element={user ? <Navigate to="/" /> : <Register />} />
 
-      <Route
+<Route
         element={
           <ProtectedRoute>
             <DashboardLayout />
           </ProtectedRoute>
         }
       >
-        <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
-        <Route path="/patient/dashboard" element={<PatientDashboard />} />
-        <Route path="/lab/dashboard" element={<LabDashboard />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-
-        <Route path="/patient/book-appointment" element={<BookAppointment />} />
-        <Route path="/patient/records" element={<PatientRecords />} />
-        <Route path="/patient/prescriptions" element={<PatientPrescriptions />} />
-        <Route path="/patient/lab-results" element={<PatientLabResults />} />
-         <Route path="/doctor/patients" element={<DoctorPatients />} />
-        <Route path="/doctor/lab-requests" element={<DoctorLabRequests />} />
-
-
+  <Route path="/doctor/dashboard" element={<ProtectedRoute allowedRoles={['DOCTOR']}><DoctorDashboard /></ProtectedRoute>} />
+        <Route path="/patient/dashboard" element={<ProtectedRoute allowedRoles={['PATIENT']}><PatientDashboard /></ProtectedRoute>} />
+        <Route path="/lab/dashboard" element={<ProtectedRoute allowedRoles={['LAB']}><LabDashboard /></ProtectedRoute>} />
+        <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/patient/book-appointment" element={<ProtectedRoute allowedRoles={['PATIENT']}><BookAppointment /></ProtectedRoute>} />
+        <Route path="/patient/records" element={<ProtectedRoute allowedRoles={['PATIENT']}><PatientRecords /></ProtectedRoute>} />
+        <Route path="/patient/prescriptions" element={<ProtectedRoute allowedRoles={['PATIENT']}><PatientPrescriptions /></ProtectedRoute>} />
+        <Route path="/patient/lab-results" element={<ProtectedRoute allowedRoles={['PATIENT']}><PatientLabResults /></ProtectedRoute>} />
+        <Route path="/doctor/patients" element={<ProtectedRoute allowedRoles={['DOCTOR']}><DoctorPatients /></ProtectedRoute>} />
+        <Route path="/doctor/lab-requests" element={<ProtectedRoute allowedRoles={['DOCTOR']}><DoctorLabRequests /></ProtectedRoute>} />
+        <Route path="/admin/create-staff" element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminCreateStaff /></ProtectedRoute>} />
       </Route>
 
       <Route

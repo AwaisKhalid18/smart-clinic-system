@@ -18,12 +18,8 @@ PATIENT: [
     { label: 'Inventory', path: '/lab/inventory' },
     { label: 'Settings', path: '/lab/settings' },
   ],
-  ADMIN: [
+ADMIN: [
     { label: 'Dashboard', path: '/admin/dashboard' },
-    { label: 'Schedule', path: '/admin/schedule' },
-    { label: 'Patients', path: '/admin/patients' },
-    { label: 'Lab Results', path: '/admin/lab-results' },
-    { label: 'Inventory', path: '/admin/inventory' },
-    { label: 'Settings', path: '/admin/settings' },
+    { label: 'Create Staff', path: '/admin/create-staff' },
   ],
 };
