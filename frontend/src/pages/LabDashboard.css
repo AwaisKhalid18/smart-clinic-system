@@ -302,3 +302,8 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+.panel {
+  overflow-x: auto;
+}

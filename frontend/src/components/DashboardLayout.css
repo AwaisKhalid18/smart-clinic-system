@@ -133,3 +133,52 @@
   flex: 1;
   padding: 1.5rem;
 }
+
+
+
+@media (max-width: 768px) {
+  .dashboard-shell {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    overflow-x: auto;
+  }
+
+  .sidebar-brand {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding: 0;
+  }
+
+  .sidebar-brand-subtitle {
+    display: none;
+  }
+
+  .sidebar-new-btn {
+    display: none;
+  }
+
+  .sidebar-nav {
+    display: none;
+  }
+
+  .sidebar-footer {
+    border-top: none;
+    padding-top: 0;
+    flex-direction: row;
+  }
+
+  .sidebar-support-btn {
+    display: none;
+  }
+
+  .dashboard-content {
+    padding: 1rem;
+  }
+}

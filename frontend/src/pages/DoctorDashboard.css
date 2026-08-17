@@ -327,3 +327,8 @@
   font-size: 0.85rem;
   padding: 1rem 0;
 }
+
+
+.panel {
+  overflow-x: auto;
+}

@@ -90,3 +90,7 @@
   color: #94a3b8;
   font-size: 0.85rem;
 }
+
+.panel {
+  overflow-x: auto;
+}
