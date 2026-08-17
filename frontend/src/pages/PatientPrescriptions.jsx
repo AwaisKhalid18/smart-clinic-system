@@ -24,11 +24,10 @@ export default function PatientPrescriptions() {
     <div>
       <h1 className="page-title">Prescriptions</h1>
       <p className="list-subtitle">Medications prescribed by your doctors.</p>
-
-      {loading ? (
-        <p>Loading...</p>
+{loading ? (
+        <p className="loading-text">Loading your prescriptions...</p>
       ) : prescriptions.length === 0 ? (
-        <div className="panel"><p>No prescriptions yet.</p></div>
+        <div className="panel"><p className="empty-text">No prescriptions yet.</p></div>
       ) : (
         <div className="record-list">
           {prescriptions.map((p) => (

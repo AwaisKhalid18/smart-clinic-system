@@ -315,3 +315,15 @@
   color: #cbd5e1;
   font-size: 0.85rem;
 }
+
+.loading-text {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  padding: 1rem 0;
+}
+
+.empty-text {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  padding: 1rem 0;
+}

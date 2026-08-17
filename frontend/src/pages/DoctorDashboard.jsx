@@ -76,9 +76,9 @@ export default function DoctorDashboard() {
           <div className="panel">
             <div className="panel-header">Upcoming Appointments</div>
             {loading ? (
-              <p>Loading...</p>
+              <p className="loading-text">Loading appointments...</p>
             ) : appointments.length === 0 ? (
-              <p>No appointments yet.</p>
+              <p className="empty-text">No appointments yet. They'll appear here once patients start booking.</p>
             ) : (
               <table className="appt-table">
                 <thead>

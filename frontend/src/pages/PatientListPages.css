@@ -79,3 +79,14 @@
   font-size: 0.82rem;
   color: #0f172a;
 }
+
+
+.loading-text {
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.empty-text {
+  color: #94a3b8;
+  font-size: 0.85rem;
+}

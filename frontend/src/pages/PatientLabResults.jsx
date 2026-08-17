@@ -26,9 +26,9 @@ export default function PatientLabResults() {
       <p className="list-subtitle">Your completed diagnostic test results.</p>
 
       {loading ? (
-        <p>Loading...</p>
+        <p className="loading-text">Loading your results...</p>
       ) : labTests.length === 0 ? (
-        <div className="panel"><p>No completed lab results yet.</p></div>
+        <div className="panel"><p className="empty-text">No completed lab results yet. Results appear here once your lab work is finished.</p></div>
       ) : (
         <div className="record-list">
           {labTests.map((t) => (

@@ -25,10 +25,10 @@ export default function PatientRecords() {
       <h1 className="page-title">Medical Records</h1>
       <p className="list-subtitle">Your diagnosis history and doctor's notes.</p>
 
-      {loading ? (
-        <p>Loading...</p>
+     {loading ? (
+        <p className="loading-text">Loading your records...</p>
       ) : records.length === 0 ? (
-        <div className="panel"><p>No medical records yet.</p></div>
+        <div className="panel"><p className="empty-text">No medical records yet. Your doctor will add entries after your visits.</p></div>
       ) : (
         <div className="record-list">
           {records.map((r) => (

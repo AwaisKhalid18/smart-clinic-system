@@ -87,14 +87,9 @@ export default function PatientDashboard() {
             <span className="side-action-sub">Find a time that works</span>
           </button>
 
-          <button className="side-action-btn">
+<button className="side-action-btn" onClick={() => navigate('/patient/lab-results')}>
             <span className="side-action-title">View Test Results</span>
-            <span className="side-action-sub">Coming soon</span>
-          </button>
-
-          <button className="side-action-btn">
-            <span className="side-action-title">Message Doctor</span>
-            <span className="side-action-sub">Coming soon</span>
+            <span className="side-action-sub">See your lab results</span>
           </button>
         </div>
       </div>
