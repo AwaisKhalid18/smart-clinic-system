@@ -1,205 +1,218 @@
-.patient-greeting {
+.pat-greeting {
   font-size: 1.5rem;
   font-weight: 700;
   color: #0f172a;
-  margin: 0 0 0.25rem 0;
+  margin: 0 0 4px 0;
 }
 
-.patient-subtitle {
-  font-size: 0.88rem;
+.pat-date {
+  font-size: 0.875rem;
   color: #64748b;
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 20px 0;
 }
 
-.patient-columns {
-  display: grid;
-  grid-template-columns: 1fr 260px;
-  gap: 1.5rem;
-  align-items: start;
-}
-
-.panel {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+.pat-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
   border-radius: 10px;
-  padding: 1.1rem;
-  margin-bottom: 1.25rem;
+  padding: 16px 20px;
+  margin-bottom: 20px;
 }
 
-.panel-header {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-.panel-header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.9rem;
-}
-
-.manage-link {
-  background: none;
-  border: none;
-  color: #0f766e;
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.manage-link:hover {
-  text-decoration: underline;
-}
-
-.confirmed-chip {
-  display: inline-block;
-  background: #d1fae5;
-  color: #065f46;
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 0.2rem 0.6rem;
-  border-radius: 999px;
-  margin-bottom: 0.9rem;
-}
-
-.appt-detail-row {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-  margin-bottom: 0.9rem;
-}
-
-.appt-icon {
-  font-size: 1.3rem;
-}
-
-.appt-detail-title {
-  font-size: 0.92rem;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-.appt-detail-sub {
-  font-size: 0.78rem;
-  color: #64748b;
-}
-
-.appt-provider {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.provider-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #ede9fe;
-  color: #6d28d9;
+.pat-banner-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
-  font-weight: 700;
   flex-shrink: 0;
 }
 
-.appt-location {
-  font-size: 0.8rem;
-  color: #64748b;
-  border-top: 1px solid #f1f5f9;
-  padding-top: 0.75rem;
-}
-
-.activity-row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.7rem 0;
-  border-bottom: 1px solid #f1f5f9;
-}
-
-.activity-row:last-child {
-  border-bottom: none;
-}
-
-.activity-icon {
-  color: #0f766e;
-  font-size: 1.2rem;
-}
-
-.activity-body {
+.pat-banner-body {
   flex: 1;
+  min-width: 0;
 }
 
-.activity-title {
-  font-size: 0.85rem;
+.pat-banner-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #1e40af;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 3px;
+}
+
+.pat-banner-main {
+  font-size: 0.9375rem;
   font-weight: 600;
-  color: #0f172a;
+  color: #1e3a8a;
 }
 
-.activity-meta {
-  font-size: 0.76rem;
-  color: #64748b;
+.pat-banner-sub {
+  font-size: 0.8125rem;
+  color: #3b82f6;
+  margin-top: 2px;
 }
 
-.activity-time {
-  font-size: 0.76rem;
-  color: #94a3b8;
+.pat-banner-btn {
+  padding: 8px 16px;
+  background: #ffffff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #1e40af;
+  cursor: pointer;
   white-space: nowrap;
 }
 
-.patient-side-col {
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
+.pat-banner-btn:hover {
+  background: #dbeafe;
 }
 
-.side-action-btn {
+.pat-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.pat-stat-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
-  padding: 0.9rem 1rem;
-  text-align: left;
-  cursor: pointer;
+  padding: 18px 20px;
+}
+
+.pat-stat-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+.pat-stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1;
+}
+
+.pat-stat-sub {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+.pat-panel {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.pat-panel-header-row {
   display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
-.side-action-btn:hover {
-  background: #f8fafc;
-}
-
-.side-action-btn.primary {
-  background: #0f766e;
-  border-color: #0f766e;
-}
-
-.side-action-btn.primary:hover {
-  background: #0c5f58;
-}
-
-.side-action-btn.primary .side-action-title,
-.side-action-btn.primary .side-action-sub {
-  color: #ffffff;
-}
-
-.side-action-title {
-  font-size: 0.88rem;
+.pat-panel-title {
+  font-size: 1rem;
   font-weight: 700;
   color: #0f172a;
 }
 
-.side-action-sub {
-  font-size: 0.76rem;
-  color: #64748b;
+.pat-view-all {
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pat-view-all:hover {
+  text-decoration: underline;
+}
+
+.pat-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pat-table th {
+  text-align: left;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  padding: 0 12px 10px 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.pat-table td {
+  padding: 12px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.8438rem;
+  color: #0f172a;
+}
+
+.pat-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.pat-badge {
+  display: inline-flex;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-scheduled {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.badge-confirmed {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.badge-cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.badge-completed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.pat-empty {
+  color: #94a3b8;
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 24px 0;
 }
 
 @media (max-width: 900px) {
-  .patient-columns {
+  .pat-stat-grid {
     grid-template-columns: 1fr;
+  }
+  .pat-banner {
+    flex-wrap: wrap;
   }
 }

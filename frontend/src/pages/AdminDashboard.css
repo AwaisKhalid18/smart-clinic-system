@@ -1,246 +1,194 @@
 .admin-header-row {
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-bottom: 24px;
 }
 
-.page-title {
+.admin-title {
   font-size: 1.5rem;
   font-weight: 700;
   color: #0f172a;
-  margin: 0 0 0.2rem 0;
+  margin: 0 0 4px 0;
 }
 
-.admin-subtitle {
-  font-size: 0.85rem;
+.admin-date {
+  font-size: 0.875rem;
   color: #64748b;
   margin: 0;
 }
 
-.admin-search {
-  padding: 0.6rem 0.9rem;
-  border: 1px solid #e2e8f0;
+.admin-new-btn {
+  padding: 10px 16px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
   border-radius: 8px;
-  font-size: 0.85rem;
-  width: 260px;
-  max-width: 100%;
-  outline: none;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.admin-search:focus {
-  border-color: #0f766e;
+.admin-new-btn:hover {
+  background: #1d4ed8;
 }
 
-.admin-stat-row {
+.admin-stat-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .admin-stat-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
-  padding: 1rem 1.1rem;
+  padding: 18px 20px;
 }
 
-.stat-label {
-  font-size: 0.72rem;
-  font-weight: 700;
+.admin-stat-label {
+  font-size: 0.75rem;
+  font-weight: 600;
   letter-spacing: 0.03em;
   text-transform: uppercase;
   color: #64748b;
-  margin-bottom: 0.4rem;
+  margin-bottom: 10px;
 }
 
-.stat-value {
-  font-size: 1.6rem;
+.admin-stat-value {
+  font-size: 1.75rem;
   font-weight: 700;
   color: #0f172a;
-  margin-bottom: 0.3rem;
+  line-height: 1;
+  margin-bottom: 6px;
 }
 
-.stat-delta {
+.admin-stat-sub {
   font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.stat-delta.up {
-  color: #059669;
-}
-
-.stat-delta.neutral {
   color: #94a3b8;
-}
-
-.capacity-bar {
-  height: 6px;
-  background: #f1f5f9;
-  border-radius: 999px;
-  overflow: hidden;
-  margin-bottom: 0.4rem;
-}
-
-.capacity-fill {
-  height: 100%;
-  background: #0f766e;
-  border-radius: 999px;
 }
 
 .admin-columns {
   display: grid;
   grid-template-columns: 1fr 320px;
-  gap: 1.5rem;
+  gap: 20px;
   align-items: start;
 }
 
-.panel {
+.admin-panel {
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
-  padding: 1.1rem;
+  padding: 20px;
+  overflow-x: auto;
 }
 
-.panel-header {
-  font-size: 0.95rem;
+.admin-panel-header-row {
+  margin-bottom: 16px;
+}
+
+.admin-panel-title {
+  font-size: 1rem;
   font-weight: 700;
   color: #0f172a;
 }
 
-.panel-subheader {
-  font-size: 0.78rem;
-  color: #64748b;
-  margin-top: 0.15rem;
-}
-
-.panel-header-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-.volume-toggle {
-  display: flex;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.toggle-btn {
-  background: #ffffff;
-  border: none;
-  padding: 0.35rem 0.75rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #64748b;
-  cursor: pointer;
-}
-
-.toggle-btn.active {
-  background: #0f766e;
-  color: #ffffff;
-}
-
-.volume-chart {
+.admin-table {
   width: 100%;
-  height: 180px;
+  border-collapse: collapse;
 }
 
-.volume-days {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.72rem;
+.admin-table th {
+  text-align: left;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: #94a3b8;
-  padding: 0 0.5rem;
+  padding: 0 12px 10px 12px;
+  border-bottom: 1px solid #e2e8f0;
 }
 
-.registration-row {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  padding: 0.65rem 0;
+.admin-table td {
+  padding: 12px;
   border-bottom: 1px solid #f1f5f9;
-}
-
-.registration-row:last-of-type {
-  border-bottom: none;
-}
-
-.reg-avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: #ede9fe;
-  color: #6d28d9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.72rem;
-  font-weight: 700;
-  flex-shrink: 0;
-}
-
-.reg-body {
-  flex: 1;
-}
-
-.reg-name {
-  font-size: 0.84rem;
-  font-weight: 600;
+  font-size: 0.8438rem;
   color: #0f172a;
 }
 
-.reg-meta {
-  font-size: 0.72rem;
-  color: #64748b;
-}
-
-.reg-time {
-  font-size: 0.72rem;
-  color: #94a3b8;
-  white-space: nowrap;
-}
-
-.new-badge {
-  background: #d1fae5;
-  color: #065f46;
-  font-weight: 700;
-  padding: 0.15rem 0.5rem;
-  border-radius: 999px;
-}
-
-.view-all-btn {
-  width: 100%;
-  padding: 0.6rem;
-  background: none;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #0f172a;
-  cursor: pointer;
-  margin-top: 0.75rem;
-}
-
-.view-all-btn:hover {
+.admin-table tbody tr:hover {
   background: #f8fafc;
 }
 
+.admin-badge {
+  display: inline-flex;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-scheduled {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.badge-confirmed {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.badge-cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.badge-completed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.admin-upcoming-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.admin-upcoming-row:last-child {
+  border-bottom: none;
+}
+
+.admin-upcoming-name {
+  font-size: 0.8438rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.admin-upcoming-date {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.admin-upcoming-doctor {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.admin-empty {
+  color: #94a3b8;
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 24px 0;
+}
+
 @media (max-width: 1000px) {
-  .admin-stat-row {
+  .admin-stat-grid {
     grid-template-columns: repeat(2, 1fr);
   }
   .admin-columns {
     grid-template-columns: 1fr;
   }
-}
-
-
-.panel {
-  overflow-x: auto;
 }

@@ -2,8 +2,11 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../api/axios';
-import hospitalBg from '../assets/hospital-hallway.webp';
 import { useAuth } from '../context/AuthContext';
+import Icon from '../components/Icon';
+import hospitalBg from '../assets/hospital-hallway.webp';
+import logo from '../assets/logo.jpg';
+
 
 export default function Register() {
   const navigate = useNavigate();
@@ -37,14 +40,11 @@ export default function Register() {
   }
 
   return (
-   <div className="auth-page register-page" style={{ backgroundImage: `url(${hospitalBg})` }}>
+  <div className="auth-page register-page" style={{ backgroundImage: `url(${hospitalBg})` }}>
       <div className="auth-header">
-        <div className="auth-icon">
-          <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
-            <rect x="10" y="4" width="4" height="16" rx="1" fill="white" />
-            <rect x="4" y="10" width="16" height="4" rx="1" fill="white" />
-          </svg>
-        </div>
+      <div className="auth-icon">
+  <img src={logo} alt="Smart Clinic logo" className="auth-icon-img" />
+</div>
         <h1>Smart Clinic</h1>
         <p>Management System</p>
       </div>
@@ -65,7 +65,7 @@ export default function Register() {
               <input
                 className="form-input"
                 name="fullName"
-                placeholder="Dr. Jane Doe"
+                placeholder="Dr. Awais Khalid"
                 value={form.fullName}
                 onChange={handleChange}
                 required
@@ -132,7 +132,12 @@ export default function Register() {
 
           <div className="form-group">
             <label>Role</label>
-            <select className="form-input" name="role" value={form.role} onChange={handleChange}>
+            <select
+              className="form-input"
+              name="role"
+              value={form.role}
+              onChange={handleChange}
+            >
               <option value="PATIENT">Patient</option>
               <option value="DOCTOR">Doctor</option>
               <option value="LAB">Lab Personnel</option>
@@ -157,9 +162,7 @@ export default function Register() {
       </div>
 
       <p className="auth-note">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z" />
-        </svg>
+        <Icon name="shield" size={14} />
         End-to-end encrypted clinical environment.
       </p>
     </div>

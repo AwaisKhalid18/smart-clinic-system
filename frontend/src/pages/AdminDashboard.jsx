@@ -1,21 +1,30 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import './AdminDashboard.css';
 
+const statusMeta = {
+  PENDING: { label: 'Scheduled', className: 'badge-scheduled' },
+  CONFIRMED: { label: 'Confirmed', className: 'badge-confirmed' },
+  CANCELLED: { label: 'Cancelled', className: 'badge-cancelled' },
+  COMPLETED: { label: 'Completed', className: 'badge-completed' },
+};
+
 export default function AdminDashboard() {
+  const navigate = useNavigate();
   const [stats, setStats] = useState(null);
-  const [patients, setPatients] = useState([]);
+  const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadData() {
       try {
-        const [statsRes, patientsRes] = await Promise.all([
+        const [statsRes, apptRes] = await Promise.all([
           api.get('/admin/stats'),
-          api.get('/admin/patients'),
+          api.get('/appointments'),
         ]);
         setStats(statsRes.data);
-        setPatients(patientsRes.data);
+        setAppointments(apptRes.data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -25,70 +34,110 @@ export default function AdminDashboard() {
     loadData();
   }, []);
 
-  const recentPatients = [...patients]
-    .sort((a, b) => new Date(b.user.createdAt) - new Date(a.user.createdAt))
-    .slice(0, 5);
+  const today = new Date().toLocaleDateString(undefined, {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+  });
+
+  const todaysAppointments = appointments.filter(
+    (a) => new Date(a.dateTime).toDateString() === new Date().toDateString()
+  );
+  const completedToday = todaysAppointments.filter((a) => a.status === 'COMPLETED').length;
+
+  const upcoming = appointments
+    .filter((a) => new Date(a.dateTime) > new Date() && a.status !== 'CANCELLED')
+    .sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime))
+    .slice(0, 3);
 
   return (
-    <div className="admin-dashboard">
+    <div>
       <div className="admin-header-row">
         <div>
-          <h1 className="page-title">Dashboard Overview</h1>
-          <p className="admin-subtitle">Today's clinic performance metrics.</p>
+          <h1 className="admin-title">Dashboard</h1>
+          <p className="admin-date">{today}</p>
         </div>
-        <input className="admin-search" placeholder="Search patients, doctors..." />
+        <button className="admin-new-btn" onClick={() => navigate('/admin/create-staff')}>
+          + Add Staff
+        </button>
       </div>
 
       {loading ? (
-        <p>Loading...</p>
+        <p className="admin-empty">Loading...</p>
       ) : (
         <>
-          <div className="admin-stat-row">
+          <div className="admin-stat-grid">
             <div className="admin-stat-card">
-              <div className="stat-label">Appointments Today</div>
-              <div className="stat-value">{stats.appointmentsToday}</div>
+              <div className="admin-stat-label">Today's Appointments</div>
+              <div className="admin-stat-value">{todaysAppointments.length}</div>
+              <div className="admin-stat-sub">{completedToday} completed · {todaysAppointments.length - completedToday} remaining</div>
             </div>
             <div className="admin-stat-card">
-              <div className="stat-label">Active Doctors</div>
-              <div className="stat-value">{stats.totalDoctors}</div>
+              <div className="admin-stat-label">Active Patients</div>
+              <div className="admin-stat-value" style={{ color: '#2563eb' }}>{stats.totalPatients}</div>
+              <div className="admin-stat-sub">registered patients</div>
             </div>
             <div className="admin-stat-card">
-              <div className="stat-label">Total Patients</div>
-              <div className="stat-value">{stats.totalPatients}</div>
+              <div className="admin-stat-label">Active Doctors</div>
+              <div className="admin-stat-value" style={{ color: '#059669' }}>{stats.totalDoctors}</div>
+              <div className="admin-stat-sub">on staff</div>
             </div>
             <div className="admin-stat-card">
-              <div className="stat-label">Total Appointments</div>
-              <div className="stat-value">{stats.totalAppointments}</div>
+              <div className="admin-stat-label">Total Appointments</div>
+              <div className="admin-stat-value">{stats.totalAppointments}</div>
+              <div className="admin-stat-sub">all time</div>
             </div>
           </div>
 
           <div className="admin-columns">
-            <div className="panel volume-panel">
-              <div className="panel-header-row">
-                <div>
-                  <div className="panel-header">Clinic Overview</div>
-                  <div className="panel-subheader">Summary of current clinic activity.</div>
-                </div>
+            <div className="admin-panel">
+              <div className="admin-panel-header-row">
+                <span className="admin-panel-title">Today's Appointments</span>
               </div>
-              <p style={{ color: '#64748b', fontSize: '0.85rem' }}>
-                Detailed volume charts will appear here once appointment history builds up over time.
-              </p>
+
+              {todaysAppointments.length === 0 ? (
+                <p className="admin-empty">No appointments scheduled today.</p>
+              ) : (
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Patient</th>
+                      <th>Doctor</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {todaysAppointments.map((a) => {
+                      const status = statusMeta[a.status];
+                      return (
+                        <tr key={a.id}>
+                          <td>{new Date(a.dateTime).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}</td>
+                          <td>{a.patient?.fullName || '—'}</td>
+                          <td>{a.doctor?.fullName || '—'}</td>
+                          <td><span className={`admin-badge ${status.className}`}>{status.label}</span></td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              )}
             </div>
 
-            <div className="panel registrations-panel">
-              <div className="panel-header-row">
-                <span className="panel-header">Recent Registrations</span>
+            <div className="admin-panel">
+              <div className="admin-panel-header-row">
+                <span className="admin-panel-title">Upcoming</span>
               </div>
-              {recentPatients.length === 0 ? (
-                <p style={{ color: '#64748b', fontSize: '0.85rem' }}>No patients registered yet.</p>
+              {upcoming.length === 0 ? (
+                <p className="admin-empty">Nothing upcoming.</p>
               ) : (
-                recentPatients.map((p) => (
-                  <div className="registration-row" key={p.id}>
-                    <div className="reg-avatar">{p.fullName.charAt(0)}</div>
-                    <div className="reg-body">
-                      <div className="reg-name">{p.fullName}</div>
-                      <div className="reg-meta">{p.user.email}</div>
+                upcoming.map((a) => (
+                  <div className="admin-upcoming-row" key={a.id}>
+                    <div>
+                      <div className="admin-upcoming-name">{a.patient?.fullName}</div>
+                      <div className="admin-upcoming-date">
+                        {new Date(a.dateTime).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} · {new Date(a.dateTime).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
+                      </div>
                     </div>
+                    <div className="admin-upcoming-doctor">{a.doctor?.fullName}</div>
                   </div>
                 ))
               )}

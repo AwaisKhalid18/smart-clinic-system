@@ -4,6 +4,9 @@ import toast from 'react-hot-toast';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import { redirectByRole } from './Register';
+import Icon from '../components/Icon';
+import hospitalBg from '../assets/hospital-hallway.webp';
+import logo from '../assets/logo.jpg';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -32,13 +35,10 @@ export default function Login() {
   }
 
   return (
-  <div className="auth-page login-page">
+      <div className="auth-page login-page" style={{ backgroundImage: `url(${hospitalBg})` }}>
       <div className="auth-header">
-        <div className="auth-icon">
-          <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
-            <rect x="10" y="4" width="4" height="16" rx="1" fill="white" />
-            <rect x="4" y="10" width="16" height="4" rx="1" fill="white" />
-          </svg>
+               <div className="auth-icon">
+          <img src={logo} alt="Smart Clinic logo" className="auth-icon-img" />
         </div>
         <h1>Smart Clinic</h1>
         <p>Management System</p>
@@ -127,12 +127,9 @@ export default function Login() {
       </div>
 
       <p className="auth-note">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z" />
-        </svg>
+        <Icon name="shield" size={14} />
         End-to-end encrypted clinical environment.
       </p>
     </div>
   );
 }
-

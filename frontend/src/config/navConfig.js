@@ -12,11 +12,6 @@ PATIENT: [
   ],
   LAB: [
     { label: 'Dashboard', path: '/lab/dashboard' },
-    { label: 'Schedule', path: '/lab/schedule' },
-    { label: 'Patients', path: '/lab/patients' },
-    { label: 'Lab Results', path: '/lab/lab-results' },
-    { label: 'Inventory', path: '/lab/inventory' },
-    { label: 'Settings', path: '/lab/settings' },
   ],
 ADMIN: [
     { label: 'Dashboard', path: '/admin/dashboard' },

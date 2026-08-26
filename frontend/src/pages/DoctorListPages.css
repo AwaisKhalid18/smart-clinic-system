@@ -1,32 +1,36 @@
 .page-title {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 1.75rem;
+  font-weight: 800;
   color: #0f172a;
-  margin: 0 0 0.2rem 0;
+  margin: 0 0 4px 0;
+  letter-spacing: -0.02em;
 }
 
 .list-subtitle {
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   color: #64748b;
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 24px 0;
 }
 
 .list-header-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1.25rem;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .new-request-btn {
-  padding: 0.6rem 1rem;
+  padding: 10px 16px;
   background: #0f766e;
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 0.85rem;
+  border-radius: 9px;
+  font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.12s ease;
 }
 
 .new-request-btn:hover {
@@ -35,9 +39,11 @@
 
 .panel {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 1.1rem;
+  border: 1px solid #f1f5f9;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  overflow-x: auto;
 }
 
 .doctor-table {
@@ -47,34 +53,38 @@
 
 .doctor-table th {
   text-align: left;
-  font-size: 0.72rem;
+  font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: #94a3b8;
-  padding: 0.5rem;
-  border-bottom: 1px solid #e2e8f0;
+  padding: 0 12px 12px 12px;
+  border-bottom: 1.5px solid #f1f5f9;
 }
 
 .doctor-table td {
-  padding: 0.65rem 0.5rem;
-  border-bottom: 1px solid #f1f5f9;
-  font-size: 0.85rem;
+  padding: 14px 12px;
+  border-bottom: 1px solid #f8fafc;
+  font-size: 0.875rem;
   color: #0f172a;
+}
+
+.doctor-table tbody tr:hover {
+  background: #fafcfd;
 }
 
 .patient-cell {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 10px;
 }
 
 .avatar-sm {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: #e2e8f0;
-  color: #334155;
+  background: #f0fdfa;
+  color: #0f766e;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -89,7 +99,7 @@
 
 .lab-request-form {
   display: flex;
-  gap: 1rem;
+  gap: 16px;
   align-items: flex-end;
   flex-wrap: wrap;
 }
@@ -97,39 +107,44 @@
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 6px;
   flex: 1;
   min-width: 200px;
 }
 
 .form-group label {
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 700;
   color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .doctor-form-input {
-  padding: 0.6rem 0.75rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 0.88rem;
+  padding: 10px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 9px;
+  font-size: 0.875rem;
   outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .doctor-form-input:focus {
   border-color: #0f766e;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
 }
 
 .submit-request-btn {
-  padding: 0.65rem 1.2rem;
+  padding: 11px 20px;
   background: #0f766e;
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 0.85rem;
+  border-radius: 9px;
+  font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
+  transition: background 0.12s ease;
 }
 
 .submit-request-btn:hover:not(:disabled) {
@@ -139,8 +154,4 @@
 .submit-request-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-}
-
-.panel {
-  overflow-x: auto;
 }

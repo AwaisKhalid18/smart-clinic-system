@@ -4,11 +4,11 @@ import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
 import './DoctorDashboard.css';
 
-const statusClass = {
-  PENDING: 'status-badge status-active',
-  CONFIRMED: 'status-badge status-confirmed',
-  CANCELLED: 'status-badge status-cancelled',
-  COMPLETED: 'status-badge status-confirmed',
+const statusMeta = {
+  PENDING: { label: 'Scheduled', className: 'badge-scheduled' },
+  CONFIRMED: { label: 'Confirmed', className: 'badge-confirmed' },
+  CANCELLED: { label: 'Cancelled', className: 'badge-cancelled' },
+  COMPLETED: { label: 'Completed', className: 'badge-completed' },
 };
 
 export default function DoctorDashboard() {
@@ -45,116 +45,124 @@ export default function DoctorDashboard() {
     }
   }
 
-  const today = new Date().toDateString();
+  const today = new Date().toLocaleDateString(undefined, {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+  });
+
   const todaysAppointments = appointments.filter(
-    (a) => new Date(a.dateTime).toDateString() === today
+    (a) => new Date(a.dateTime).toDateString() === new Date().toDateString()
   );
-  const cancellations = appointments.filter((a) => a.status === 'CANCELLED').length;
+  const completedToday = todaysAppointments.filter((a) => a.status === 'COMPLETED').length;
+  const remainingToday = todaysAppointments.length - completedToday;
+
+  const startOfWeek = new Date();
+  startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+  startOfWeek.setHours(0, 0, 0, 0);
+  const thisWeekCount = appointments.filter((a) => new Date(a.dateTime) >= startOfWeek).length;
+
+  const upcoming = appointments
+    .filter((a) => new Date(a.dateTime) > new Date() && a.status !== 'CANCELLED')
+    .sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime))
+    .slice(0, 4);
 
   return (
-    <div className="doctor-dashboard">
-      <div className="dashboard-columns">
-        <div className="main-col">
-          <p className="greeting-eyebrow">Good morning, {user.email}</p>
-          <h1 className="page-title">Today's Schedule</h1>
+    <div>
+      <h1 className="doc-greeting">Good morning, {user.email.split('@')[0]}</h1>
+      <p className="doc-date">{today}</p>
 
-          <div className="stat-row">
-            <div className="stat-card">
-              <div className="stat-label">Total Appointments</div>
-              <div className="stat-value">{appointments.length}</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-label">Today</div>
-              <div className="stat-value">{todaysAppointments.length}</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-label">Cancellations</div>
-              <div className="stat-value stat-danger">{cancellations}</div>
-            </div>
+      <div className="doc-stat-grid">
+        <div className="doc-stat-card">
+          <div className="doc-stat-label">Today's Patients</div>
+          <div className="doc-stat-value">{todaysAppointments.length}</div>
+        </div>
+        <div className="doc-stat-card">
+          <div className="doc-stat-label">Completed</div>
+          <div className="doc-stat-value" style={{ color: '#059669' }}>{completedToday}</div>
+        </div>
+        <div className="doc-stat-card">
+          <div className="doc-stat-label">Remaining</div>
+          <div className="doc-stat-value" style={{ color: '#2563eb' }}>{remainingToday}</div>
+        </div>
+        <div className="doc-stat-card">
+          <div className="doc-stat-label">This Week</div>
+          <div className="doc-stat-value">{thisWeekCount}</div>
+          <div className="doc-stat-sub">appointments</div>
+        </div>
+      </div>
+
+      <div className="doc-columns">
+        <div className="doc-panel">
+          <div className="doc-panel-header-row">
+            <span className="doc-panel-title">Today's Schedule</span>
           </div>
 
-          <div className="panel">
-            <div className="panel-header">Upcoming Appointments</div>
-            {loading ? (
-              <p className="loading-text">Loading appointments...</p>
-            ) : appointments.length === 0 ? (
-              <p className="empty-text">No appointments yet. They'll appear here once patients start booking.</p>
-            ) : (
-              <table className="appt-table">
-                <thead>
-                  <tr>
-                    <th>Date & Time</th>
-                    <th>Patient</th>
-                    <th>Notes</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {appointments.map((appt) => (
-                    <tr key={appt.id}>
-                      <td>{new Date(appt.dateTime).toLocaleString(undefined, {
-                        month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit',
-                      })}</td>
+          {loading ? (
+            <p className="doc-empty">Loading...</p>
+          ) : todaysAppointments.length === 0 ? (
+            <p className="doc-empty">No appointments today.</p>
+          ) : (
+            <table className="doc-table">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Patient</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {todaysAppointments.map((a) => {
+                  const status = statusMeta[a.status];
+                  return (
+                    <tr key={a.id}>
+                      <td>{new Date(a.dateTime).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}</td>
+                      <td>{a.patient?.fullName || 'Unknown'}</td>
+                      <td><span className={`doc-badge ${status.className}`}>{status.label}</span></td>
                       <td>
-                        <div className="patient-cell">
-                          <div className="avatar-sm">{appt.patient?.fullName?.charAt(0) || '?'}</div>
-                          <div>
-                            <div className="patient-name">{appt.patient?.fullName || 'Unknown'}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td>{appt.notes || '—'}</td>
-                      <td>
-                        <span className={statusClass[appt.status]}>{appt.status}</span>
-                      </td>
-                      <td>
-                        {appt.status === 'PENDING' && (
-                          <div className="appt-actions">
-                            <button
-                              className="appt-action-btn confirm"
-                              disabled={updatingId === appt.id}
-                              onClick={() => updateStatus(appt.id, 'CONFIRMED')}
-                            >
-                              Confirm
-                            </button>
-                            <button
-                              className="appt-action-btn cancel"
-                              disabled={updatingId === appt.id}
-                              onClick={() => updateStatus(appt.id, 'CANCELLED')}
-                            >
-                              Cancel
-                            </button>
+                        {a.status === 'PENDING' && (
+                          <div className="doc-actions">
+                            <button className="doc-btn confirm" disabled={updatingId === a.id} onClick={() => updateStatus(a.id, 'CONFIRMED')}>Confirm</button>
+                            <button className="doc-btn cancel" disabled={updatingId === a.id} onClick={() => updateStatus(a.id, 'CANCELLED')}>Cancel</button>
                           </div>
                         )}
-                        {appt.status === 'CONFIRMED' && (
-                          <div className="appt-actions">
-                            <button
-                              className="appt-action-btn confirm"
-                              disabled={updatingId === appt.id}
-                              onClick={() => updateStatus(appt.id, 'COMPLETED')}
-                            >
-                              Mark Completed
-                            </button>
-                            <button
-                              className="appt-action-btn cancel"
-                              disabled={updatingId === appt.id}
-                              onClick={() => updateStatus(appt.id, 'CANCELLED')}
-                            >
-                              Cancel
-                            </button>
+                        {a.status === 'CONFIRMED' && (
+                          <div className="doc-actions">
+                            <button className="doc-btn confirm" disabled={updatingId === a.id} onClick={() => updateStatus(a.id, 'COMPLETED')}>Complete</button>
+                            <button className="doc-btn cancel" disabled={updatingId === a.id} onClick={() => updateStatus(a.id, 'CANCELLED')}>Cancel</button>
                           </div>
                         )}
-                        {(appt.status === 'COMPLETED' || appt.status === 'CANCELLED') && (
-                          <span className="appt-no-action">—</span>
-                        )}
+                        {(a.status === 'COMPLETED' || a.status === 'CANCELLED') && <span className="doc-muted">—</span>}
                       </td>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
+        </div>
+
+        <div className="doc-panel">
+          <div className="doc-panel-header-row">
+            <span className="doc-panel-title">Upcoming Appointments</span>
           </div>
+          {upcoming.length === 0 ? (
+            <p className="doc-empty">Nothing upcoming.</p>
+          ) : (
+            upcoming.map((a) => {
+              const status = statusMeta[a.status];
+              return (
+                <div className="doc-upcoming-row" key={a.id}>
+                  <div>
+                    <div className="doc-upcoming-name">{a.patient?.fullName}</div>
+                    <div className="doc-upcoming-date">
+                      {new Date(a.dateTime).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} at {new Date(a.dateTime).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
+                    </div>
+                  </div>
+                  <span className={`doc-badge ${status.className}`}>{status.label}</span>
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
     </div>
