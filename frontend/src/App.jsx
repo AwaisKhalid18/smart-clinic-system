@@ -17,7 +17,7 @@ import PatientLabResults from './pages/PatientLabResults';
 import DoctorPatients from './pages/DoctorPatients';
 import DoctorLabRequests from './pages/DoctorLabRequests';
 import AdminCreateStaff from './pages/AdminCreateStaff';
-
+import Notifications from './pages/Notifications';
 
 function App() {
   const { user, loading } = useAuth();
@@ -47,6 +47,7 @@ function App() {
         <Route path="/doctor/patients" element={<ProtectedRoute allowedRoles={['DOCTOR']}><DoctorPatients /></ProtectedRoute>} />
         <Route path="/doctor/lab-requests" element={<ProtectedRoute allowedRoles={['DOCTOR']}><DoctorLabRequests /></ProtectedRoute>} />
         <Route path="/admin/create-staff" element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminCreateStaff /></ProtectedRoute>} />
+                <Route path="/notifications" element={<Notifications />} />
       </Route>
 
       <Route

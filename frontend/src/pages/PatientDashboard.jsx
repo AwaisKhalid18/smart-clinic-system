@@ -54,9 +54,16 @@ export default function PatientDashboard() {
     .slice(0, 5);
 
   return (
-    <div>
-      <h1 className="pat-greeting">Welcome back, {firstName}</h1>
-      <p className="pat-date">{today}</p>
+       <div>
+      <div className="pat-header-row">
+        <div>
+          <h1 className="pat-greeting">Welcome back, {firstName}</h1>
+          <p className="pat-date">{today}</p>
+        </div>
+        <button className="pat-new-btn" onClick={() => navigate('/patient/book-appointment')}>
+          + New Appointment
+        </button>
+      </div>
 
       {!loading && nextAppointment && (
         <div className="pat-banner">

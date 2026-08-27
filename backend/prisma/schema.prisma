@@ -21,11 +21,11 @@ model User {
   role      Role
   createdAt DateTime @default(now())
 
-  doctor    Doctor?
-  patient   Patient?
-  labStaff  LabPersonnel?
+  doctor        Doctor?
+  patient       Patient?
+  labStaff      LabPersonnel?
+  notifications Notification[]
 }
-
 model Doctor {
   id           Int      @id @default(autoincrement())
   userId       Int      @unique
@@ -142,4 +142,21 @@ model LabTest {
   resultFileUrl   String?
   requestedAt     DateTime      @default(now())
   completedAt     DateTime?
+}
+
+
+enum NotificationPriority {
+  NORMAL
+  HIGH
+}
+
+model Notification {
+  id        Int                  @id @default(autoincrement())
+  userId    Int
+  user      User                 @relation(fields: [userId], references: [id])
+  title     String
+  message   String
+  priority  NotificationPriority @default(NORMAL)
+  read      Boolean              @default(false)
+  createdAt DateTime             @default(now())
 }

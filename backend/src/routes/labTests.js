@@ -2,6 +2,8 @@ const express = require('express');
 const { z } = require('zod');
 const prisma = require('../prismaClient');
 const { authenticate, authorize } = require('../middleware/auth');
+const { createNotification } = require('../utils/notify');
+
 
 const router = express.Router();
 
@@ -137,8 +139,22 @@ router.patch('/:id/status', authenticate, authorize('LAB'), async (req, res) => 
 
     const updated = await prisma.labTest.update({
       where: { id: testId },
-      data: { status: parsed.data.status },
+      data: {
+        resultText: parsed.data.resultText,
+        resultFileUrl: parsed.data.resultFileUrl,
+        status: 'COMPLETED',
+        completedAt: new Date(),
+      },
+      include: { patient: true },
     });
+
+    await createNotification(
+      updated.patient.userId,
+      'Lab Results Available',
+      `Your results for ${updated.testType} are now available.`
+    );
+
+    res.json(updated);
 
     res.json(updated);
   } catch (err) {

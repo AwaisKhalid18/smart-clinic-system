@@ -83,6 +83,42 @@
   color: #ffffff;
 }
 
+
+
+.shell-nav-link {
+  position: relative;
+}
+
+.shell-nav-badge {
+  margin-left: auto;
+  background: #dc2626;
+  color: #ffffff;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+}
+
+.shell-icon-btn {
+  position: relative;
+}
+
+.shell-icon-dot {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #dc2626;
+  border: 1.5px solid #ffffff;
+}
+
 .shell-nav-link.active {
   background: #2563eb;
   color: #ffffff;

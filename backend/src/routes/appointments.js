@@ -2,6 +2,8 @@ const express = require('express');
 const { z } = require('zod');
 const prisma = require('../prismaClient');
 const { authenticate, authorize } = require('../middleware/auth');
+const { createNotification } = require('../utils/notify');
+
 
 const router = express.Router();
 
@@ -41,6 +43,14 @@ router.post('/', authenticate, authorize('PATIENT'), async (req, res) => {
         notes: parsed.data.notes,
       },
     });
+
+    await createNotification(
+      doctor.userId,
+      'New Appointment Request',
+      `${patient.fullName} booked an appointment for ${new Date(appointment.dateTime).toLocaleString()}.`
+    );
+
+    res.status(201).json(appointment);
 
     res.status(201).json(appointment);
   } catch (err) {
@@ -119,7 +129,17 @@ router.patch('/:id', authenticate, authorize('DOCTOR', 'ADMIN'), async (req, res
     const updated = await prisma.appointment.update({
       where: { id: appointmentId },
       data: { status: parsed.data.status },
+      include: { patient: true },
     });
+
+     await createNotification(
+      updated.patient.userId,
+      'Appointment Update',
+      `Your appointment on ${new Date(updated.dateTime).toLocaleString()} is now ${updated.status.toLowerCase()}.`,
+      updated.status === 'CANCELLED' ? 'HIGH' : 'NORMAL'
+    );
+
+    res.json(updated);
 
     res.json(updated);
   } catch (err) {

@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { navConfig } from '../config/navConfig';
+import api from '../api/axios';
 import Icon from './Icon';
 import logo from '../assets/logo.jpg';
 
@@ -15,6 +16,8 @@ const navIcons = {
   'Lab Results': 'flask',
   'Lab Requests': 'flask',
   'Create Staff': 'users',
+  Billing: 'creditCard',
+  Notifications: 'bell',
 };
 
 const avatarColors = ['#dc2626', '#7c3aed', '#059669', '#2563eb', '#db2777', '#d97706'];
@@ -30,11 +33,24 @@ export default function DashboardLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const links = navConfig[user.role] || [];
   const displayName = user.email.split('@')[0];
   const initials = displayName.charAt(0).toUpperCase();
   const avatarColor = colorForName(user.email);
+
+  useEffect(() => {
+    async function loadCount() {
+      try {
+        const res = await api.get('/notifications');
+        setUnreadCount(res.data.filter((n) => !n.read).length);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    loadCount();
+  }, [location.pathname]);
 
   function handleLogout() {
     logout();
@@ -69,6 +85,9 @@ export default function DashboardLayout() {
             >
               <Icon name={navIcons[link.label] || 'fileText'} size={17} strokeWidth={2} />
               {link.label}
+              {link.label === 'Notifications' && unreadCount > 0 && (
+                <span className="shell-nav-badge">{unreadCount}</span>
+              )}
             </Link>
           ))}
         </nav>
@@ -80,8 +99,9 @@ export default function DashboardLayout() {
 
           <div className="shell-topbar-right">
             <span className="shell-topbar-date">{today}</span>
-            <button className="shell-icon-btn">
+            <button className="shell-icon-btn" onClick={() => navigate('/notifications')}>
               <Icon name="bell" size={19} strokeWidth={1.8} />
+              {unreadCount > 0 && <span className="shell-icon-dot" />}
             </button>
 
             <div className="shell-user-menu">
