@@ -91,6 +91,11 @@ export default function DashboardLayout() {
             </Link>
           ))}
         </nav>
+
+        <button className="shell-sidebar-logout" onClick={handleLogout}>
+          <Icon name="chevronRight" size={17} strokeWidth={2} className="shell-logout-icon" />
+          Log Out
+        </button>
       </aside>
 
       <div className="shell-body">
@@ -105,24 +110,13 @@ export default function DashboardLayout() {
             </button>
 
             <div className="shell-user-menu">
-              <button className="shell-user-trigger" onClick={() => setMenuOpen(!menuOpen)}>
-                <div className="shell-user-avatar" style={{ background: avatarColor }}>
-                  {initials}
-                </div>
-                <div className="shell-user-text">
-                  <div className="shell-user-name">{displayName}</div>
-                  <div className="shell-user-role">{user.role}</div>
-                </div>
-                <Icon name="chevronDown" size={15} strokeWidth={2} />
-              </button>
-
-              {menuOpen && (
-                <div className="shell-user-dropdown">
-                  <button className="shell-user-dropdown-item" onClick={handleLogout}>
-                    Log Out
-                  </button>
-                </div>
-              )}
+              <div className="shell-user-avatar" style={{ background: avatarColor }}>
+                {initials}
+              </div>
+              <div className="shell-user-text">
+                <div className="shell-user-name">{displayName}</div>
+                <div className="shell-user-role">{user.role}</div>
+              </div>
             </div>
           </div>
         </header>
